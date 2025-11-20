@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameCenter - Koleksi Game Seru</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* VARIABEL & RESET */
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5A52D5;
+            --secondary: #FF6584;
+            --accent: #36D1DC;
+            --dark: #121212;
+            --darker: #0A0A0A;
+            --light: #F5F5F7;
+            --gray: #8E8E93;
+            --card-bg: rgba(30, 30, 40, 0.8);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+            --gradient-secondary: linear-gradient(135deg, var(--secondary), #FF8E53);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.5);
+            --glow: 0 0 20px rgba(108, 99, 255, 0.4);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'SF Pro Display', system-ui, -apple-system, sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: 
+                radial-gradient(ellipse at 10% 20%, rgba(108, 99, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(255, 101, 132, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(54, 209, 220, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, #0A0A0A 0%, #121212 100%);
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* BACKGROUND EFFECTS */
+        .bg-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            top: 10%;
+            right: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 250px;
+            height: 250px;
+            background: var(--secondary);
+            bottom: 15%;
+            left: 10%;
+            animation-delay: 5s;
+        }
+
+        .shape-3 {
+            width: 200px;
+            height: 200px;
+            background: var(--accent);
+            top: 50%;
+            left: 20%;
+            animation-delay: 10s;
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            25% { transform: translate(30px, -30px) rotate(90deg) scale(1.05); }
+            50% { transform: translate(-20px, 20px) rotate(180deg) scale(1.1); }
+            75% { transform: translate(-30px, -20px) rotate(270deg) scale(1.05); }
+        }
+
+        /* HEADER & NAVIGATION */
+        header {
+            background: rgba(18, 18, 18, 0.9);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.2rem 5%;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            animation: shine 3s infinite;
+        }
+        
+        .logo-icon i {
+            color: white;
+            font-size: 1.4rem;
+            z-index: 1;
+        }
+        
+        .logo-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+        }
+        
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+            font-size: 1.05rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 0.9rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            font-size: 1.05rem;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            z-index: 2;
+            text-align: center;
+            margin: 0 auto;
+            padding-top: 80px;
+        }
+        
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            font-weight: 800;
+        }
+        
+        .hero-gradient {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: block;
+            font-size: 5rem;
+            position: relative;
+        }
+
+        .hero-gradient::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2.5rem;
+            color: var(--gray);
+            font-weight: 400;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 3rem;
+        }
+        
+        .secondary-button {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 0.9rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.05rem;
+        }
+        
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        /* SECTION STYLING */
+        section {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.2rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+            font-weight: 800;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+        }
+
+        /* GAMES GRID */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .game-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .game-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .game-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .game-card p {
+            color: var(--gray);
+            margin-bottom: 2rem;
+            flex-grow: 1;
+            line-height: 1.6;
+        }
+
+        .game-button {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 0.9rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: fit-content;
+            margin-top: auto;
+        }
+
+        .game-button:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        /* GAME CONTAINER */
+        .game-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .game-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .game-title {
+            font-size: 2.2rem;
+            color: white;
+            font-weight: 700;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* GAME SPECIFIC STYLES */
+        .game-area {
+            background: rgba(15, 15, 25, 0.8);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-ui {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .game-stats {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-button {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* TIC TAC TOE GAME */
+        .tic-tac-toe-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .tic-tac-toe-cell {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tic-tac-toe-cell:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tic-tac-toe-cell.x {
+            color: var(--primary);
+        }
+
+        .tic-tac-toe-cell.o {
+            color: var(--secondary);
+        }
+
+        /* MEMORY GAME */
+        .memory-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 10px;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+        }
+
+        .memory-card {
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card.flipped {
+            background: white;
+            color: var(--primary);
+            transform: rotateY(180deg);
+        }
+
+        .memory-card.matched {
+            background: var(--accent);
+            color: white;
+            cursor: default;
+        }
+
+        /* SNAKE GAME */
+        .snake-board {
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            grid-template-rows: repeat(20, 1fr);
+            gap: 1px;
+            width: 400px;
+            height: 400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .snake-cell {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .snake-cell.snake {
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .snake-cell.food {
+            background: var(--secondary);
+            border-radius: 50%;
+        }
+
+        /* FEATURES SECTION */
+        .features {
+            background: rgba(10, 10, 20, 0.5);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.8rem;
+            box-shadow: var(--shadow);
+        }
+
+        .feature-icon i {
+            font-size: 2.2rem;
+            color: white;
+        }
+
+        .feature-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+            color: white;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+        footer {
+            background: rgba(5, 5, 10, 0.95);
+            padding: 4rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-logo-icon i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .footer-logo-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 600;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        /* ANIMATIONS */
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1200px) {
+            .hero h1 {
+                font-size: 4rem;
+            }
+            
+            .hero-gradient {
+                font-size: 4.5rem;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+            
+            .hero-gradient {
+                font-size: 4rem;
+            }
+            
+            .section-title h2 {
+                font-size: 3rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                padding-top: 120px;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero-gradient {
+                font-size: 3.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.3rem;
+            }
+            
+            .hero-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .section-title h2 {
+                font-size: 2.5rem;
+            }
+            
+            .game-card, .feature-card {
+                padding: 2rem;
+            }
+            
+            .tic-tac-toe-board, .memory-board, .snake-board {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .memory-board {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(4, 1fr);
+                height: 300px;
+            }
+            
+            .snake-board {
+                grid-template-columns: repeat(15, 1fr);
+                grid-template-rows: repeat(15, 1fr);
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-gradient {
+                font-size: 2.5rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .game-ui {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .game-stats, .game-controls {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-effects">
+        <div class="floating-shapes shape-1"></div>
+        <div class="floating-shapes shape-2"></div>
+        <div class="floating-shapes shape-3"></div>
+        <div class="grid-bg"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <span class="logo-text">GameCenter</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home">Beranda</a>
+                <a href="#games">Game</a>
+                <a href="#features">Fitur</a>
+                <a href="#about">Tentang</a>
+                <a href="#contact">Kontak</a>
+            </div>
+            <button class="cta-button" id="startGamesBtn">Main Sekarang</button>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>
+                <span class="hero-gradient">GameCenter</span>
+                Koleksi Game Seru & Menantang
+            </h1>
+            <p>Temukan berbagai game menarik yang dapat dimainkan langsung di browser. Dari puzzle hingga arcade, semua tersedia dengan grafis yang memukau.</p>
+            <div class="hero-buttons">
+                <button class="cta-button" id="heroGamesBtn">
+                    <i class="fas fa-play"></i> Jelajahi Game
+                </button>
+                <button class="secondary-button">
+                    <i class="fas fa-trophy"></i> Lihat Leaderboard
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section id="games">
+        <div class="section-title">
+            <h2>Koleksi Game</h2>
+            <p>Pilih game favorit Anda dan mulai bermain sekarang juga!</p>
+        </div>
+        
+        <div class="games-grid">
+            <!-- Tic Tac Toe -->
+            <div class="game-card">
+                <div class="game-icon">
+                    <i class="fas fa-times"></i>
+                </div>
+                <h3>Tic Tac Toe</h3>
+                <p>Game klasik X dan O yang menantang. Mainkan melawan AI atau teman Anda dan buat garis lurus untuk menang!</p>
+                <button class="game-button" onclick="loadGame('tic-tac-toe')">
+                    <i class="fas fa-play"></i> Main Sekarang
+                </button>
+            </div>
+
+            <!-- Memory Game -->
+            <div class="game-card">
+                <div class="game-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>Memory Match</h3>
+                <p>Uji daya ingat Anda dengan mencocokkan kartu yang sama. Temukan semua pasangan dengan gerakan sesedikit mungkin!</p>
+                <button class="game-button" onclick="loadGame('memory')">
+                    <i class="fas fa-play"></i> Main Sekarang
+                </button>
+            </div>
+
+            <!-- Snake Game -->
+            <div class="game-card">
+                <div class="game-icon">
+                    <i class="fas fa-snake"></i>
+                </div>
+                <h3>Snake Classic</h3>
+                <p>Game klasik ular yang legendaris. Makan makanan untuk tumbuh lebih panjang, tapi hindari menabrak dinding atau tubuh sendiri!</p>
+                <button class="game-button" onclick="loadGame('snake')">
+                    <i class="fas fa-play"></i> Main Sekarang
+                </button>
+            </div>
+
+            <!-- Puzzle Game -->
+            <div class="game-card">
+                <div class="game-icon">
+                    <i class="fas fa-puzzle-piece"></i>
+                </div>
+                <h3>Number Puzzle</h3>
+                <p>Susun angka dalam urutan yang benar dengan menggeser kotak kosong. Tantang kemampuan logika dan strategi Anda!</p>
+                <button class="game-button" onclick="loadGame('puzzle')">
+                    <i class="fas fa-play"></i> Main Sekarang
+                </button>
+            </div>
+
+            <!-- Reaction Test -->
+            <div class="game-card">
+                <div class="game-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Reaction Test</h3>
+                <p>Uji kecepatan reaksi Anda dengan menekan tombol secepat mungkin ketika warna berubah. Latih refleks Anda!</p>
+                <button class="game-button" onclick="loadGame('reaction')">
+                    <i class="fas fa-play"></i> Main Sekarang
+                </button>
+            </div>
+
+            <!-- Math Challenge -->
+            <div class="game-card">
+                <div class="game-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <h3>Math Challenge</h3>
+                <p>Jawab soal matematika secepat mungkin sebelum waktu habis. Tingkatkan kemampuan berhitung Anda dengan cara yang menyenangkan!</p>
+                <button class="game-button" onclick="loadGame('math')">
+                    <i class="fas fa-play"></i> Main Sekarang
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Containers -->
+        <div class="game-container" id="tic-tac-toe-game">
+            <div class="game-header">
+                <h2 class="game-title">Tic Tac Toe</h2>
+                <button class="back-button" onclick="hideGame()">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
+            </div>
+            
+            <div class="game-ui">
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="player-score">0</div>
+                        <div class="stat-label">Pemain (X)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="ai-score">0</div>
+                        <div class="stat-label">AI (O)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="draws">0</div>
+                        <div class="stat-label">Seri</div>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <button class="control-button" onclick="resetTicTacToe()">
+                        <i class="fas fa-redo"></i> Ulangi
+                    </button>
+                </div>
+            </div>
+            
+            <div class="game-area">
+                <div class="tic-tac-toe-board" id="tic-tac-toe-board">
+                    <!-- Cells will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="game-container" id="memory-game">
+            <div class="game-header">
+                <h2 class="game-title">Memory Match</h2>
+                <button class="back-button" onclick="hideGame()">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
+            </div>
+            
+            <div class="game-ui">
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="moves">0</div>
+                        <div class="stat-label">Gerakan</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="matches">0</div>
+                        <div class="stat-label">Cocok</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="timer">0</div>
+                        <div class="stat-label">Detik</div>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <button class="control-button" onclick="resetMemoryGame()">
+                        <i class="fas fa-redo"></i> Ulangi
+                    </button>
+                </div>
+            </div>
+            
+            <div class="game-area">
+                <div class="memory-board" id="memory-board">
+                    <!-- Cards will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="game-container" id="snake-game">
+            <div class="game-header">
+                <h2 class="game-title">Snake Classic</h2>
+                <button class="back-button" onclick="hideGame()">
+                    <i class="fas fa-arrow-left"></i> Kembali
+                </button>
+            </div>
+            
+            <div class="game-ui">
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-value" id="snake-score">0</div>
+                        <div class="stat-label">Skor</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="snake-length">1</div>
+                        <div class="stat-label">Panjang</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value" id="snake-highscore">0</div>
+                        <div class="stat-label">Rekor</div>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <button class="control-button" onclick="resetSnakeGame()">
+                        <i class="fas fa-redo"></i> Ulangi
+                    </button>
+                </div>
+            </div>
+            
+            <div class="game-area">
+                <div class="snake-board" id="snake-board">
+                    <!-- Snake cells will be generated by JavaScript -->
+                </div>
+                <p style="margin-top: 1rem; color: var(--gray);">Gunakan tombol panah untuk menggerakkan ular</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>Fitur Unggulan</h2>
+            <p>Mengapa GameCenter menjadi pilihan terbaik untuk bermain game online</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h3>Banyak Pilihan Game</h3>
+                <p>Koleksi game yang terus bertambah dengan berbagai genre dan tingkat kesulitan.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Responsif & Cepat</h3>
+                <p>Semua game dioptimalkan untuk performa terbaik tanpa lag atau delay.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-paint-brush"></i>
+                </div>
+                <h3>Grafis Memukau</h3>
+                <p>Desain visual yang modern dan menarik untuk pengalaman bermain yang lebih menyenangkan.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Kompatibel Semua Perangkat</h3>
+                <p>Dapat dimainkan di desktop, tablet, atau smartphone tanpa masalah.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3>Sistem Skor & Peringkat</h3>
+                <p>Lacak perkembangan Anda dan bandingkan dengan pemain lain.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Aman & Gratis</h3>
+                <p>Tidak perlu registrasi atau mengunduh, mainkan langsung dengan aman.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="footer-logo-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <span class="footer-logo-text">GameCenter</span>
+            </div>
+            <div class="footer-links">
+                <a href="#home">Beranda</a>
+                <a href="#games">Game</a>
+                <a href="#features">Fitur</a>
+                <a href="#about">Tentang</a>
+                <a href="#contact">Kontak</a>
+                <a href="#privacy">Kebijakan Privasi</a>
+                <a href="#terms">Syarat & Ketentuan</a>
+            </div>
+            <div class="copyright">
+                <p>Hak Cipta &copy; 2025 GameCenter. All rights reserved.</p>
+                <p>Dibuat dengan ❤️ untuk para gamers</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const startGamesBtn = document.getElementById('startGamesBtn');
+        const heroGamesBtn = document.getElementById('heroGamesBtn');
+
+        // Scroll to games function
+        function scrollToGames() {
+            document.getElementById('games').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Event Listeners for buttons
+        startGamesBtn.addEventListener('click', scrollToGames);
+        heroGamesBtn.addEventListener('click', scrollToGames);
+
+        // Game Management Functions
+        function loadGame(gameId) {
+            // Hide all game containers
+            document.querySelectorAll('.game-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            // Show selected game
+            document.getElementById(`${gameId}-game`).classList.add('active');
+            
+            // Initialize the game
+            if (gameId === 'tic-tac-toe') {
+                initTicTacToe();
+            } else if (gameId === 'memory') {
+                initMemoryGame();
+            } else if (gameId === 'snake') {
+                initSnakeGame();
+            }
+            
+            // Scroll to game
+            document.getElementById(`${gameId}-game`).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function hideGame() {
+            document.querySelectorAll('.game-container').forEach(container => {
+                container.classList.remove('active');
+            });
+        }
+
+        // Tic Tac Toe Game
+        let ticTacToeBoard = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'X';
+        let playerScore = 0;
+        let aiScore = 0;
+        let draws = 0;
+        let gameActive = true;
+
+        function initTicTacToe() {
+            const boardElement = document.getElementById('tic-tac-toe-board');
+            boardElement.innerHTML = '';
+            
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'tic-tac-toe-cell';
+                cell.setAttribute('data-index', i);
+                cell.addEventListener('click', () => handleTicTacToeClick(i));
+                boardElement.appendChild(cell);
+            }
+            
+            resetTicTacToe();
+        }
+
+        function handleTicTacToeClick(index) {
+            if (ticTacToeBoard[index] !== '' || !gameActive || currentPlayer !== 'X') return;
+            
+            makeMove(index, 'X');
+            
+            if (checkWinner()) {
+                playerScore++;
+                updateTicTacToeScores();
+                gameActive = false;
+                setTimeout(() => {
+                    alert('Anda Menang!');
+                    resetTicTacToe();
+                }, 300);
+                return;
+            }
+            
+            if (isBoardFull()) {
+                draws++;
+                updateTicTacToeScores();
+                gameActive = false;
+                setTimeout(() => {
+                    alert('Permainan Seri!');
+                    resetTicTacToe();
+                }, 300);
+                return;
+            }
+            
+            currentPlayer = 'O';
+            setTimeout(makeAIMove, 500);
+        }
+
+        function makeMove(index, player) {
+            ticTacToeBoard[index] = player;
+            const cell = document.querySelector(`.tic-tac-toe-cell[data-index="${index}"]`);
+            cell.textContent = player;
+            cell.classList.add(player.toLowerCase());
+        }
+
+        function makeAIMove() {
+            const emptyCells = ticTacToeBoard.map((cell, index) => cell === '' ? index : null).filter(val => val !== null);
+            
+            if (emptyCells.length === 0) return;
+            
+            // Simple AI - random move
+            const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            makeMove(randomIndex, 'O');
+            
+            if (checkWinner()) {
+                aiScore++;
+                updateTicTacToeScores();
+                gameActive = false;
+                setTimeout(() => {
+                    alert('AI Menang!');
+                    resetTicTacToe();
+                }, 300);
+                return;
+            }
+            
+            if (isBoardFull()) {
+                draws++;
+                updateTicTacToeScores();
+                gameActive = false;
+                setTimeout(() => {
+                    alert('Permainan Seri!');
+                    resetTicTacToe();
+                }, 300);
+                return;
+            }
+            
+            currentPlayer = 'X';
+        }
+
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+                [0, 4, 8], [2, 4, 6] // Diagonals
+            ];
+            
+            return winPatterns.some(pattern => {
+                const [a, b, c] = pattern;
+                return ticTacToeBoard[a] !== '' && 
+                       ticTacToeBoard[a] === ticTacToeBoard[b] && 
+                       ticTacToeBoard[a] === ticTacToeBoard[c];
+            });
+        }
+
+        function isBoardFull() {
+            return ticTacToeBoard.every(cell => cell !== '');
+        }
+
+        function resetTicTacToe() {
+            ticTacToeBoard = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'X';
+            gameActive = true;
+            
+            document.querySelectorAll('.tic-tac-toe-cell').forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('x', 'o');
+            });
+        }
+
+        function updateTicTacToeScores() {
+            document.getElementById('player-score').textContent = playerScore;
+            document.getElementById('ai-score').textContent = aiScore;
+            document.getElementById('draws').textContent = draws;
+        }
+
+        // Memory Game
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+        let memoryTimer = 0;
+        let memoryTimerInterval;
+
+        function initMemoryGame() {
+            const boardElement = document.getElementById('memory-board');
+            boardElement.innerHTML = '';
+            
+            // Create card values (pairs)
+            const symbols = ['🍎', '🍌', '🍒', '🍇', '🍊', '🍓', '🍑', '🥝'];
+            memoryCards = [...symbols, ...symbols];
+            
+            // Shuffle cards
+            for (let i = memoryCards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [memoryCards[i], memoryCards[j]] = [memoryCards[j], memoryCards[i]];
+            }
+            
+            // Create card elements
+            memoryCards.forEach((symbol, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.setAttribute('data-index', index);
+                card.textContent = symbol;
+                card.addEventListener('click', () => flipCard(index));
+                boardElement.appendChild(card);
+            });
+            
+            resetMemoryGame();
+        }
+
+        function flipCard(index) {
+            const card = document.querySelector(`.memory-card[data-index="${index}"]`);
+            
+            if (card.classList.contains('flipped') || card.classList.contains('matched') || flippedCards.length >= 2) {
+                return;
+            }
+            
+            card.classList.add('flipped');
+            flippedCards.push(index);
+            
+            if (flippedCards.length === 2) {
+                moves++;
+                document.getElementById('moves').textContent = moves;
+                
+                const [firstIndex, secondIndex] = flippedCards;
+                const firstCard = memoryCards[firstIndex];
+                const secondCard = memoryCards[secondIndex];
+                
+                if (firstCard === secondCard) {
+                    // Match found
+                    document.querySelector(`.memory-card[data-index="${firstIndex}"]`).classList.add('matched');
+                    document.querySelector(`.memory-card[data-index="${secondIndex}"]`).classList.add('matched');
+                    matchedPairs++;
+                    document.getElementById('matches').textContent = matchedPairs;
+                    flippedCards = [];
+                    
+                    if (matchedPairs === memoryCards.length / 2) {
+                        clearInterval(memoryTimerInterval);
+                        setTimeout(() => {
+                            alert(`Selamat! Anda menyelesaikan game dalam ${moves} gerakan dan ${memoryTimer} detik!`);
+                        }, 500);
+                    }
+                } else {
+                    // No match
+                    setTimeout(() => {
+                        document.querySelector(`.memory-card[data-index="${firstIndex}"]`).classList.remove('flipped');
+                        document.querySelector(`.memory-card[data-index="${secondIndex}"]`).classList.remove('flipped');
+                        flippedCards = [];
+                    }, 1000);
+                }
+            }
+        }
+
+        function resetMemoryGame() {
+            flippedCards = [];
+            matchedPairs = 0;
+            moves = 0;
+            memoryTimer = 0;
+            
+            document.getElementById('moves').textContent = moves;
+            document.getElementById('matches').textContent = matchedPairs;
+            document.getElementById('timer').textContent = memoryTimer;
+            
+            clearInterval(memoryTimerInterval);
+            memoryTimerInterval = setInterval(() => {
+                memoryTimer++;
+                document.getElementById('timer').textContent = memoryTimer;
+            }, 1000);
+            
+            document.querySelectorAll('.memory-card').forEach(card => {
+                card.classList.remove('flipped', 'matched');
+            });
+        }
+
+        // Snake Game
+        let snake = [{x: 10, y: 10}];
+        let food = {x: 5, y: 5};
+        let direction = 'right';
+        let snakeScore = 0;
+        let snakeHighscore = 0;
+        let snakeGameInterval;
+
+        function initSnakeGame() {
+            const boardElement = document.getElementById('snake-board');
+            boardElement.innerHTML = '';
+            
+            // Create snake board cells
+            for (let y = 0; y < 20; y++) {
+                for (let x = 0; x < 20; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'snake-cell';
+                    cell.setAttribute('data-x', x);
+                    cell.setAttribute('data-y', y);
+                    boardElement.appendChild(cell);
+                }
+            }
+            
+            resetSnakeGame();
+            
+            // Add keyboard controls
+            document.addEventListener('keydown', handleKeyPress);
+        }
+
+        function handleKeyPress(e) {
+            const key = e.key;
+            if (key === 'ArrowUp' && direction !== 'down') direction = 'up';
+            else if (key === 'ArrowDown' && direction !== 'up') direction = 'down';
+            else if (key === 'ArrowLeft' && direction !== 'right') direction = 'left';
+            else if (key === 'ArrowRight' && direction !== 'left') direction = 'right';
+        }
+
+        function updateSnakeGame() {
+            // Move snake
+            const head = {...snake[0]};
+            
+            if (direction === 'up') head.y--;
+            else if (direction === 'down') head.y++;
+            else if (direction === 'left') head.x--;
+            else if (direction === 'right') head.x++;
+            
+            // Check wall collision
+            if (head.x < 0 || head.x >= 20 || head.y < 0 || head.y >= 20) {
+                gameOver();
+                return;
+            }
+            
+            // Check self collision
+            if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                gameOver();
+                return;
+            }
+            
+            snake.unshift(head);
+            
+            // Check food collision
+            if (head.x === food.x && head.y === food.y) {
+                snakeScore += 10;
+                document.getElementById('snake-score').textContent = snakeScore;
+                document.getElementById('snake-length').textContent = snake.length;
+                
+                if (snakeScore > snakeHighscore) {
+                    snakeHighscore = snakeScore;
+                    document.getElementById('snake-highscore').textContent = snakeHighscore;
+                }
+                
+                generateFood();
+            } else {
+                snake.pop();
+            }
+            
+            renderSnake();
+        }
+
+        function generateFood() {
+            let newFood;
+            do {
+                newFood = {
+                    x: Math.floor(Math.random() * 20),
+                    y: Math.floor(Math.random() * 20)
+                };
+            } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
+            
+            food = newFood;
+        }
+
+        function renderSnake() {
+            // Clear board
+            document.querySelectorAll('.snake-cell').forEach(cell => {
+                cell.classList.remove('snake', 'food');
+            });
+            
+            // Render snake
+            snake.forEach(segment => {
+                const cell = document.querySelector(`.snake-cell[data-x="${segment.x}"][data-y="${segment.y}"]`);
+                if (cell) cell.classList.add('snake');
+            });
+            
+            // Render food
+            const foodCell = document.querySelector(`.snake-cell[data-x="${food.x}"][data-y="${food.y}"]`);
+            if (foodCell) foodCell.classList.add('food');
+        }
+
+        function gameOver() {
+            clearInterval(snakeGameInterval);
+            alert(`Game Over! Skor Anda: ${snakeScore}`);
+            resetSnakeGame();
+        }
+
+        function resetSnakeGame() {
+            clearInterval(snakeGameInterval);
+            
+            snake = [{x: 10, y: 10}];
+            direction = 'right';
+            snakeScore = 0;
+            
+            document.getElementById('snake-score').textContent = snakeScore;
+            document.getElementById('snake-length').textContent = snake.length;
+            
+            generateFood();
+            renderSnake();
+            
+            snakeGameInterval = setInterval(updateSnakeGame, 150);
+        }
+
+        // Add animation to elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease forwards';
+                }
+            });
+        }, observerOptions);
+        
+        // Apply animation to cards
+        document.querySelectorAll('.game-card, .feature-card').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.background = 'rgba(18, 18, 18, 0.95)';
+                header.style.backdropFilter = 'blur(20px)';
+            } else {
+                header.style.background = 'rgba(18, 18, 18, 0.9)';
+                header.style.backdropFilter = 'blur(20px)';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
