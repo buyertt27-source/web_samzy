@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile & Payment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* --- 1. GLOBAL STYLE --- */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #00c6ff;
+            --secondary: #0072ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
+            background-size: 300% 300%;
+            animation: bgMove 15s ease infinite;
+            color: #fff;
+        }
+
+        @keyframes bgMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- 2. WRAPPER UTAMA --- */
+        .main-wrapper {
+            position: relative;
+            width: 360px;
+            height: 680px;
+            perspective: 1000px;
+        }
+
+        .section {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            padding: 25px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s;
+            backface-visibility: hidden;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+        .section::-webkit-scrollbar { display: none; }
+
+        /* Logic Flip Halaman */
+        #page-bio { transform: rotateY(0deg); opacity: 1; z-index: 2; }
+        #page-payment { transform: rotateY(180deg); opacity: 0; z-index: 1; }
+
+        .flipped #page-bio { transform: rotateY(-180deg); opacity: 0; z-index: 1; }
+        .flipped #page-payment { transform: rotateY(0deg); opacity: 1; z-index: 2; }
+
+        /* --- 3. BIODATA --- */
+        .profile-img-box {
+            width: 110px; height: 110px; border-radius: 50%;
+            background: linear-gradient(to bottom right, var(--primary), var(--secondary));
+            padding: 3px; margin: 10px 0 15px;
+            box-shadow: 0 0 20px rgba(0, 198, 255, 0.3);
+        }
+        .profile-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #1a1a2e; }
+        
+        .name { font-size: 24px; font-weight: 600; margin-bottom: 2px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .role { font-size: 14px; color: var(--primary); margin-bottom: 20px; letter-spacing: 1px; }
+        
+        .bio-text {
+            text-align: center; font-size: 13px; line-height: 1.6; color: #ddd;
+            margin-bottom: 25px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .btn {
+            padding: 12px 30px; border-radius: 30px; border: none; cursor: pointer;
+            font-weight: 600; width: 100%; margin-top: auto;
+            background: linear-gradient(90deg, var(--primary), var(--secondary)); color: white;
+            box-shadow: 0 5px 15px rgba(0, 198, 255, 0.3); transition: 0.3s;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0, 198, 255, 0.5); }
+        .btn-back { width: auto; background: rgba(255,255,255,0.1); font-size: 12px; padding: 8px 20px; margin-bottom: 20px; margin-top: 0;}
+
+        /* --- 4. PEMBAYARAN & REVIEW --- */
+        .section-title { font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid var(--primary); padding-bottom: 5px; width: 100%; }
+        
+        .payment-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; margin-bottom: 15px;
+        }
+        .pay-icon {
+            background: rgba(255,255,255,0.05); border-radius: 10px; padding: 10px 5px;
+            text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid transparent;
+        }
+        .pay-icon:hover, .pay-icon.active { background: rgba(255,255,255,0.15); border-color: var(--primary); transform: translateY(-3px); }
+        .pay-icon i { font-size: 20px; margin-bottom: 5px; display: block; }
+        .pay-icon span { font-size: 10px; font-weight: 600; }
+
+        /* Detail Box (Tempat Nomor Muncul) */
+        .payment-detail-box {
+            width: 100%; min-height: 80px;
+            background: rgba(0, 198, 255, 0.1);
+            border: 1px solid rgba(0, 198, 255, 0.3);
+            border-radius: 12px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 15px; margin-bottom: 25px; text-align: center;
+            transition: opacity 0.3s ease;
+        }
+        .detail-title { font-size: 12px; color: #aaa; margin-bottom: 5px; }
+        .detail-number { font-size: 18px; font-weight: 600; color: #fff; letter-spacing: 1px; margin-bottom: 2px; }
+        .detail-name { font-size: 13px; color: var(--primary); margin-bottom: 10px; }
+        .btn-copy {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: white; padding: 5px 15px; border-radius: 15px; font-size: 11px; cursor: pointer;
+        }
+        .btn-copy:hover { background: var(--primary); border-color: var(--primary); }
+
+        /* Warna Brand */
+        .c-dana { color: #118EEA; } .c-gopay { color: #00AA13; } .c-ovo { color: #4C3494; } .c-qris { color: #fff; }
+
+        /* Review Styles */
+        .input-glass { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 8px; color: white; margin-bottom: 8px; font-family: inherit; }
+        .review-item { font-size: 12px; background: rgba(0,0,0,0.2); padding: 10px; margin-bottom: 8px; border-radius: 8px; border-left: 2px solid var(--primary); }
+
+        /* --- 5. QRIS MODAL (ZOOM) --- */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+            align-items: center; justify-content: center; flex-direction: column;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal.show { opacity: 1; }
+        .modal-content {
+            max-width: 85%; max-height: 70%; border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255,255,255,0.2);
+            animation: zoomIn 0.3s ease;
+        }
+        .modal-buttons { margin-top: 20px; display: flex; gap: 15px; }
+        .modal-btn { padding: 10px 20px; border-radius: 20px; text-decoration: none; color: white; font-size: 14px; cursor: pointer; border: none;}
+        .btn-download { background: var(--secondary); }
+        .btn-close { background: #ff4b4b; }
+
+        @keyframes zoomIn { from { transform: scale(0.8); } to { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <div class="main-wrapper" id="mainWrapper">
+        
+        <section class="section" id="page-bio">
+            <div class="profile-img-box">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&auto=format&fit=crop&w=880&q=80" alt="Profile" class="profile-img">
+            </div>
+            <h1 class="name">Nama Anda</h1>
+            <p class="role">Digital Creator & Seller</p>
+
+            <div class="bio-text">
+                "Halo! Selamat datang di profil saya. Saya menyediakan layanan digital berkualitas dan terpercaya. 
+                Jangan ragu untuk bertransaksi, kepuasan Anda adalah prioritas utama saya. 
+                Silakan cek metode pembayaran di halaman berikutnya."
+            </div>
+
+            <ul style="list-style:none; width:100%; font-size:13px; color:#ccc; margin-bottom:20px;">
+                <li style="margin-bottom:8px;"><i class="fas fa-check-circle" style="color:var(--primary); margin-right:8px;"></i> Fast Response</li>
+                <li style="margin-bottom:8px;"><i class="fas fa-shield-alt" style="color:var(--primary); margin-right:8px;"></i> Trusted Seller</li>
+            </ul>
+
+            <button class="btn" onclick="flipPage()">
+                Pembayaran & Review <i class="fas fa-arrow-right"></i>
+            </button>
+        </section>
+
+
+        <section class="section" id="page-payment">
+            <button class="btn btn-back" onclick="flipPage()"><i class="fas fa-arrow-left"></i> Kembali</button>
+
+            <h3 class="section-title">Metode Pembayaran</h3>
+            
+            <div class="payment-grid">
+                <div class="pay-icon" onclick="showPayment('DANA', this)">
+                    <i class="fas fa-wallet c-dana"></i> <span>DANA</span>
+                </div>
+                <div class="pay-icon" onclick="showPayment('OVO', this)">
+                    <i class="fas fa-mobile-alt c-ovo"></i> <span>OVO</span>
+                </div>
+                <div class="pay-icon" onclick="showPayment('GOPAY', this)">
+                    <i class="fas fa-motorcycle c-gopay"></i> <span>GOPAY</span>
+                </div>
+                <div class="pay-icon" onclick="openQris()">
+                    <i class="fas fa-qrcode c-qris"></i> <span>QRIS</span>
+                </div>
+            </div>
+
+            <div id="payment-box" class="payment-detail-box">
+                <span class="detail-title">Pilih metode di atas</span>
+                <span class="detail-number">-</span>
+            </div>
+
+            <h3 class="section-title" style="margin-top: 20px;">Ulasan Pelanggan</h3>
+            <div style="width: 100%;">
+                <form id="reviewForm">
+                    <input type="text" id="rName" class="input-glass" placeholder="Nama..." required>
+                    <textarea id="rText" class="input-glass" rows="2" placeholder="Ulasan..." required></textarea>
+                    <button type="submit" class="btn" style="padding: 8px; font-size:12px; margin-top:5px;">Kirim</button>
+                </form>
+                <div id="reviewsList" style="margin-top:15px; max-height:120px; overflow-y:auto;"></div>
+            </div>
+        </section>
+    </div>
+
+    <div id="qrisModal" class="modal">
+        <h3 style="color:white; margin-bottom:15px;">Scan QRIS</h3>
+        <img src="https://files.catbox.moe/bxwyvu.png" alt="QRIS Code" class="modal-content">
+        
+        <div class="modal-buttons">
+            <a href="https://files.catbox.moe/bxwyvu.png" download="QRIS-Saya.png" target="_blank" class="modal-btn btn-download">
+                <i class="fas fa-download"></i> Download
+            </a>
+            <button class="modal-btn btn-close" onclick="closeQris()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. ANIMASI FLIP HALAMAN
+        function flipPage() {
+            document.getElementById('mainWrapper').classList.toggle('flipped');
+        }
+
+        // 2. LOGIKA PEMBAYARAN (Smooth Transition)
+        // Data Pembayaran
+        const payments = {
+            'DANA': { number: '083862949796', name: 'a/n A K**', color: '#118EEA' },
+            'OVO':  { number: '083862949796', name: 'a/n sa****', color: '#4C3494' },
+            'GOPAY':{ number: '083862949796', name: 'a/n sa**el', color: '#00AA13' }
+        };
+
+        function showPayment(type, element) {
+            const box = document.getElementById('payment-box');
+            const icons = document.querySelectorAll('.pay-icon');
+            
+            // Reset active state icon
+            icons.forEach(icon => icon.classList.remove('active'));
+            element.classList.add('active');
+
+            // Efek Fade Out konten lama
+            box.style.opacity = '0';
+
+            setTimeout(() => {
+                // Update Konten
+                const data = payments[type];
+                box.innerHTML = `
+                    <span class="detail-title">Transfer via ${type}</span>
+                    <span class="detail-number" style="color:${data.color}">${data.number}</span>
+                    <span class="detail-name">${data.name}</span>
+                    <button class="btn-copy" onclick="copyToClipboard('${data.number}')">
+                        <i class="fas fa-copy"></i> Salin Nomor
+                    </button>
+                `;
+                // Efek Fade In
+                box.style.opacity = '1';
+            }, 300); // Tunggu 300ms sesuai durasi transisi
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Nomor berhasil disalin: ' + text);
+            });
+        }
+
+        // 3. LOGIKA QRIS MODAL
+        function openQris() {
+            const modal = document.getElementById('qrisModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('show'), 10); // Trigger animasi CSS
+        }
+
+        function closeQris() {
+            const modal = document.getElementById('qrisModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        // 4. LOGIKA REVIEW (Local Storage)
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewsList = document.getElementById('reviewsList');
+        const STORAGE_KEY = 'my_reviews_v2';
+        const USER_KEY = 'user_has_reviewed_v2';
+
+        document.addEventListener('DOMContentLoaded', loadReviews);
+
+        reviewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if(localStorage.getItem(USER_KEY)) {
+                alert('Anda hanya bisa memberikan ulasan 1 kali.'); return;
+            }
+            const name = document.getElementById('rName').value;
+            const text = document.getElementById('rText').value;
+            const reviews = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            
+            reviews.unshift({ name, text });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
+            localStorage.setItem(USER_KEY, 'true');
+            
+            renderReviews();
+            reviewForm.reset();
+        });
+
+        function loadReviews() {
+            if(!localStorage.getItem(STORAGE_KEY)) {
+                // Dummy Data Awal
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([
+                    {name: "Pelanggan 1", text: "Proses cepat, mantap!"},
+                    {name: "User123", text: "Trusted seller, thanks gan."}
+                ]));
+            }
+            renderReviews();
+        }
+
+        function renderReviews() {
+            const reviews = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            reviewsList.innerHTML = reviews.map(r => `
+                <div class="review-item">
+                    <strong>${r.name}</strong><br>
+                    <span style="color:#ddd;">"${r.text}"</span>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
